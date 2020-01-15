@@ -1,0 +1,263 @@
+/*==============================================================*/
+/* DBMS name:      PostgreSQL 9.x                               */
+/* Created on:     13/01/2020 23:29:05                          */
+/*==============================================================*/
+
+
+/*==============================================================*/
+/* Table: AUD_BITACORA                                          */
+/*==============================================================*/
+create table AUD_BITACORA (
+   COD_EVENTO           SERIAL not null,
+   ID_USUARIO           INT4                 null,
+   FECHA_EVENTO         DATE                 null,
+   METODO               VARCHAR(50)          null,
+   DESCRIPCION          VARCHAR(100)         null,
+   DIRECCION_IP         VARCHAR(20)          null,
+   constraint PK_AUD_BITACORA primary key (COD_EVENTO)
+);
+
+/*==============================================================*/
+/* Index: AUD_BITACORA_PK                                       */
+/*==============================================================*/
+create unique index AUD_BITACORA_PK on AUD_BITACORA (
+COD_EVENTO
+);
+
+/*==============================================================*/
+/* Index: RELATIONSHIP_1_FK                                     */
+/*==============================================================*/
+create  index RELATIONSHIP_1_FK on AUD_BITACORA (
+ID_USUARIO
+);
+
+/*==============================================================*/
+/* Table: ESP_AREA                                              */
+/*==============================================================*/
+create table ESP_AREA (
+   ID_AREA              SERIAL not null,
+   NOMBRE_AREA          VARCHAR(100)         not null,
+   COD_AREA             VARCHAR(50)          not null,
+   TIEMPO_APROX         TIME               null,
+   CANT_TURNOS          INT4                 null,
+   constraint PK_ESP_AREA primary key (ID_AREA)
+);
+
+/*==============================================================*/
+/* Index: ESP_AREA_PK                                           */
+/*==============================================================*/
+create unique index ESP_AREA_PK on ESP_AREA (
+ID_AREA
+);
+
+/*==============================================================*/
+/* Table: ESP_PERSONAL                                          */
+/*==============================================================*/
+create table ESP_PERSONAL (
+   ID_PERSONAL          SERIAL not null,
+   ID_AREA              INT4                 null,
+   ID_USUARIO           INT4                 null,
+   HORAS_LABORABLES     INT4                 null,
+   constraint PK_ESP_PERSONAL primary key (ID_PERSONAL)
+);
+
+/*==============================================================*/
+/* Index: ESP_PERSONAL_PK                                       */
+/*==============================================================*/
+create unique index ESP_PERSONAL_PK on ESP_PERSONAL (
+ID_PERSONAL
+);
+
+/*==============================================================*/
+/* Index: RELATIONSHIP_4_FK                                     */
+/*==============================================================*/
+create  index RELATIONSHIP_4_FK on ESP_PERSONAL (
+ID_USUARIO
+);
+
+/*==============================================================*/
+/* Index: RELATIONSHIP_9_FK                                     */
+/*==============================================================*/
+create  index RELATIONSHIP_9_FK on ESP_PERSONAL (
+ID_AREA
+);
+
+/*==============================================================*/
+/* Table: SEG_ASIGNACION                                        */
+/*==============================================================*/
+create table SEG_ASIGNACION (
+   ID_ASIGNACION        SERIAL not null,
+   ID_ROL               INT4                 null,
+   ID_USUARIO           INT4                 null,
+   constraint PK_SEG_ASIGNACION primary key (ID_ASIGNACION)
+);
+
+/*==============================================================*/
+/* Index: SEG_ASIGNACION_PK                                     */
+/*==============================================================*/
+create unique index SEG_ASIGNACION_PK on SEG_ASIGNACION (
+ID_ASIGNACION
+);
+
+/*==============================================================*/
+/* Index: RELATIONSHIP_2_FK                                     */
+/*==============================================================*/
+create  index RELATIONSHIP_2_FK on SEG_ASIGNACION (
+ID_ROL
+);
+
+/*==============================================================*/
+/* Index: RELATIONSHIP_3_FK                                     */
+/*==============================================================*/
+create  index RELATIONSHIP_3_FK on SEG_ASIGNACION (
+ID_USUARIO
+);
+
+/*==============================================================*/
+/* Table: SEG_ROL                                               */
+/*==============================================================*/
+create table SEG_ROL (
+   ID_ROL               SERIAL not null,
+   NOMBRE_ROL           VARCHAR(50)          null,
+   constraint PK_SEG_ROL primary key (ID_ROL)
+);
+
+/*==============================================================*/
+/* Index: SEG_ROL_PK                                            */
+/*==============================================================*/
+create unique index SEG_ROL_PK on SEG_ROL (
+ID_ROL
+);
+
+/*==============================================================*/
+/* Table: TUR_ESTADO                                            */
+/*==============================================================*/
+create table TUR_ESTADO (
+   ID_ESTADO            SERIAL not null,
+   DESCRIPCION_ESTADO   VARCHAR(100)         null,
+   constraint PK_TUR_ESTADO primary key (ID_ESTADO)
+);
+
+/*==============================================================*/
+/* Index: TUR_ESTADO_PK                                         */
+/*==============================================================*/
+create unique index TUR_ESTADO_PK on TUR_ESTADO (
+ID_ESTADO
+);
+
+/*==============================================================*/
+/* Table: TUR_TURNOS                                            */
+/*==============================================================*/
+create table TUR_TURNOS (
+   ID_TURNOS            SERIAL not null,
+   ID_AREA              INT4                 null,
+   ID_ROL               INT4                 null,
+   ID_ESTADO            INT4                 null,
+   ID_PERSONAL          INT4                 null,
+   FECHA                TIMESTAMP            not null,
+   NRO_TURNO            INT4                 null,
+   constraint PK_TUR_TURNOS primary key (ID_TURNOS)
+);
+
+/*==============================================================*/
+/* Index: TUR_TURNOS_PK                                         */
+/*==============================================================*/
+create unique index TUR_TURNOS_PK on TUR_TURNOS (
+ID_TURNOS
+);
+
+/*==============================================================*/
+/* Index: RELATIONSHIP_5_FK                                     */
+/*==============================================================*/
+create  index RELATIONSHIP_5_FK on TUR_TURNOS (
+ID_ROL
+);
+
+/*==============================================================*/
+/* Index: RELATIONSHIP_6_FK                                     */
+/*==============================================================*/
+create  index RELATIONSHIP_6_FK on TUR_TURNOS (
+ID_AREA
+);
+
+/*==============================================================*/
+/* Index: RELATIONSHIP_7_FK                                     */
+/*==============================================================*/
+create  index RELATIONSHIP_7_FK on TUR_TURNOS (
+ID_PERSONAL
+);
+
+/*==============================================================*/
+/* Index: RELATIONSHIP_8_FK                                     */
+/*==============================================================*/
+create  index RELATIONSHIP_8_FK on TUR_TURNOS (
+ID_ESTADO
+);
+
+/*==============================================================*/
+/* Table: USUARIO                                               */
+/*==============================================================*/
+create table USUARIO (
+   ID_USUARIO           SERIAL not null,
+   CEDULA               VARCHAR(10)          not null,
+   NOMBRES	      VARCHAR(50)          not null,
+   APELLIDOS	      VARCHAR(50)          not null,
+   FECHA_NACIMIENTO     DATE                 null,
+   DIRECCION            VARCHAR(50)          null,
+   EMAIL                VARCHAR(30)          null,
+   CLAVE                VARCHAR(50)          null,
+   constraint PK_USUARIO primary key (ID_USUARIO)
+);
+
+/*==============================================================*/
+/* Index: USUARIO_PK                                            */
+/*==============================================================*/
+create unique index USUARIO_PK on USUARIO (
+ID_USUARIO
+);
+
+alter table AUD_BITACORA
+   add constraint FK_AUD_BITA_RELATIONS_USUARIO foreign key (ID_USUARIO)
+      references USUARIO (ID_USUARIO)
+      on delete restrict on update restrict;
+
+alter table ESP_PERSONAL
+   add constraint FK_ESP_PERS_RELATIONS_USUARIO foreign key (ID_USUARIO)
+      references USUARIO (ID_USUARIO)
+      on delete restrict on update restrict;
+
+alter table ESP_PERSONAL
+   add constraint FK_ESP_PERS_RELATIONS_ESP_AREA foreign key (ID_AREA)
+      references ESP_AREA (ID_AREA)
+      on delete restrict on update restrict;
+
+alter table SEG_ASIGNACION
+   add constraint FK_SEG_ASIG_RELATIONS_SEG_ROL foreign key (ID_ROL)
+      references SEG_ROL (ID_ROL)
+      on delete restrict on update restrict;
+
+alter table SEG_ASIGNACION
+   add constraint FK_SEG_ASIG_RELATIONS_USUARIO foreign key (ID_USUARIO)
+      references USUARIO (ID_USUARIO)
+      on delete restrict on update restrict;
+
+alter table TUR_TURNOS
+   add constraint FK_TUR_TURN_RELATIONS_SEG_ROL foreign key (ID_ROL)
+      references SEG_ROL (ID_ROL)
+      on delete restrict on update restrict;
+
+alter table TUR_TURNOS
+   add constraint FK_TUR_TURN_RELATIONS_ESP_AREA foreign key (ID_AREA)
+      references ESP_AREA (ID_AREA)
+      on delete restrict on update restrict;
+
+alter table TUR_TURNOS
+   add constraint FK_TUR_TURN_RELATIONS_ESP_PERS foreign key (ID_PERSONAL)
+      references ESP_PERSONAL (ID_PERSONAL)
+      on delete restrict on update restrict;
+
+alter table TUR_TURNOS
+   add constraint FK_TUR_TURN_RELATIONS_TUR_ESTA foreign key (ID_ESTADO)
+      references TUR_ESTADO (ID_ESTADO)
+      on delete restrict on update restrict;
+
